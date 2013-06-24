@@ -29,3 +29,21 @@ $opts{'u'} = project files owner (default "root")
 $opts{'w'} = project directory owner (default "root")
 
 $opts{'v'} = major version
+
+Jenkins Integration
+-------------------
+
+I use this in the BUILD section of jenkins by executing a shell like so:
+
+    # Clean up and create directories
+    id
+    for dir in BUILD RPMS SOURCES SPECS SRPMS
+    do
+     [[ -d /data/rpmbuild/${JOB_NAME}/$dir ]] && rm -Rf /data/rpmbuild/$dir
+      mkdir -p /data/rpmbuild/${JOB_NAME}/$dir
+    done
+    /data/rpmbuild/makespec.pl -p ${JOB_NAME} -v 1.0 -d '/var/www/html/sparkenergy' -s ${JOB_NAME}.spec -m "Spark Energy Web Code"
+    rpmbuild --define '_topdir '/data/rpmbuild/${JOB_NAME} -bb /data/rpmbuild/${JOB_NAME}/SPECS/${JOB_NAME}.${BUILD_NUMBER}.spec
+    #... Additional build steps, such as publish to Artifactory, push to yum repo and rebuild yum database
+    
+Where '/data/rpmbuild' matches the value of $RPM_BUILD_ROOT defined within the script.
