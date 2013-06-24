@@ -39,7 +39,7 @@ I use this in the BUILD section of jenkins by executing a shell like so:
     id
     for dir in BUILD RPMS SOURCES SPECS SRPMS
     do
-     [[ -d /data/rpmbuild/${JOB_NAME}/$dir ]] && rm -Rf /data/rpmbuild/$dir
+     [[ -d /data/rpmbuild/${JOB_NAME}/$dir ]] && rm -Rf /data/rpmbuild/${JOB_NAME}/$dir
       mkdir -p /data/rpmbuild/${JOB_NAME}/$dir
     done
     /data/rpmbuild/makespec.pl -p ${JOB_NAME} -v 1.0 -d '/var/www/html/sparkenergy' -s ${JOB_NAME}.spec -m "Spark Energy Web Code"
