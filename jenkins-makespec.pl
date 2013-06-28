@@ -54,7 +54,9 @@ my $project_description = $opts{'D'} || 'Project Description';
 my $project_install = <<END;
 mkdir -p %{buildroot}$opts{'d'}
 cp -Rpf $ENV{'WORKSPACE'}/* %{buildroot}$opts{'d'}
-find $ENV{'WORKSPACE'}/ -name .htaccess -exec cp {} %{buildroot}$opts{'d'} \;
+if [ -f $ENV{'WORKSPACE'}/.htaccess ]; then
+  cp $ENV{'WORKSPACE'}/.htaccess %{buildroot}$opts{'d'}
+fi
 
 install -d -m 755 %{buildroot}
 END
