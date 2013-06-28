@@ -13,6 +13,7 @@ use strict;
 use Getopt::Std;
 use File::Basename;
 my(%opts, $project_changelog); # Define placeholders
+my @parsed = fileparse( $0 );
 
 # Assumptions:
 # - Changelog is stored within the CMS root.
@@ -53,6 +54,8 @@ my $project_description = $opts{'D'} || 'Project Description';
 my $project_install = <<END;
 mkdir -p %{buildroot}$opts{'d'}
 cp -Rpf $ENV{'WORKSPACE'}/* %{buildroot}$opts{'d'}
+find $ENV{'WORKSPACE'}/ -name .htaccess -exec cp {} %{buildroot}$opts{'d'} \;
+
 install -d -m 755 %{buildroot}
 END
 
@@ -97,7 +100,7 @@ $project_description
 $project_install
 
 %clean
-#rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %files
 %defattr(644,@<<<<<<<<<<,@<<<<<<<<<,755)
@@ -117,7 +120,6 @@ write SPECFILE;
 #
 
 sub VERSION_MESSAGE {
-	my @parsed = fileparse( $0 );
 	print "$parsed[0] v1.0\n";
 	print <<EOH;
 	$parsed[0]
